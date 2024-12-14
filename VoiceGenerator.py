@@ -4,12 +4,16 @@ from playsound3 import playsound
 import asyncio
 
 class VoiceGenerator:
+    counter = 0
+
     def __init__(self):
         pass
 
     @staticmethod
     async def create_and_play_text(text):
-        output_file = "output.mp3"
+        output_file = f"output{VoiceGenerator.counter}.mp3"
+        VoiceGenerator.counter += 1
+
         communicate = Communicate(text, voice='pl-PL-ZofiaNeural')
         await communicate.save(output_file)
         playsound(output_file)

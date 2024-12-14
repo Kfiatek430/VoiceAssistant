@@ -1,6 +1,12 @@
 import webbrowser
+import os
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+from comtypes import CLSCTX_ALL
+from ctypes import cast, POINTER
 
 class CommandHandler:
+    isSilentMode = False
+
     def __init__(self, voice_generator, weather_fetcher):
         self.voice_generator = voice_generator
         self.weather_fetcher = weather_fetcher
@@ -10,7 +16,12 @@ class CommandHandler:
             "szukaj wikipedia": self.search_wiki,
             "sprawdź pogodę": self.check_weather,
             "zamknij": self.exit_program,
-            "komendy": self.display_commands
+            "komendy": self.display_commands,
+            "powiedz": self.voice_generator.play_text,
+            "włącz muzykę": self.open_wmplayer,
+            "zegar": self.set_alarm,
+            "włącz tryb cichy": self.enable_silent_mode,
+            "wyłącz tryb cichy": self.disable_silent_mode
         }
 
     def handle_command(self, text):
@@ -68,6 +79,40 @@ class CommandHandler:
             text_to_speak += command + ", "
 
         self.voice_generator.play_text(text_to_speak)
+
+    def open_wmplayer(self):
+        os.system("start wmplayer")
+        self.voice_generator.play_text("Otwieram Windows Media Player")
+
+    def set_alarm(self):
+        os.system("start ms-clock:")
+        self.voice_generator.play_text("Otwieram zegar")
+
+    def enable_silent_mode(self):
+        if not self.isSilentMode:
+            self.set_silent_mode(1)
+        else:
+            self.voice_generator.play_text("Tryb cichy jest już włączony")
+
+    def disable_silent_mode(self):
+        if self.isSilentMode:
+            self.set_silent_mode(0)
+        else:
+            self.voice_generator.play_text("Tryb cichy jest już wyłączony")
+
+    def set_silent_mode(self, state):
+        devices = AudioUtilities.GetSpeakers()
+        interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+        volume_controller = cast(interface, POINTER(IAudioEndpointVolume))
+
+        if state == 1:
+            volume_controller.SetMute(1, None)
+            self.isSilentMode = True
+            self.voice_generator.play_text("Włączam tryb cichy")
+        else:
+            volume_controller.SetMute(0, None)
+            self.isSilentMode = False
+            self.voice_generator.play_text("Wyłączam tryb cichy")
 
     def exit_program(self):
         self.voice_generator.play_text("Do zobaczenia!")
