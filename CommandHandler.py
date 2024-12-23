@@ -3,6 +3,9 @@ import os
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL
 from ctypes import cast, POINTER
+from Command import Command
+import urllib.parse
+import re
 
 class CommandHandler:
     isSilentMode = False
@@ -11,17 +14,17 @@ class CommandHandler:
         self.voice_generator = voice_generator
         self.weather_fetcher = weather_fetcher
         self.commands = {
-            "otwórz przeglądarkę": self.open_browser,
-            "wyszukaj": self.search,
-            "szukaj wikipedia": self.search_wiki,
-            "sprawdź pogodę": self.check_weather,
-            "zamknij": self.exit_program,
-            "komendy": self.display_commands,
-            "powiedz": self.voice_generator.play_text,
-            "włącz muzykę": self.open_wmplayer,
-            "zegar": self.set_alarm,
-            "włącz tryb cichy": self.enable_silent_mode,
-            "wyłącz tryb cichy": self.disable_silent_mode
+            "otwórz przeglądarkę": Command(self.open_browser, 0),
+            "wyszukaj": Command(self.search, 1),
+            "szukaj wikipedia": Command(self.search_wiki, 1),
+            "sprawdź pogodę": Command(self.check_weather, 1),
+            "zamknij": Command(self.exit_program, 0),
+            "komendy": Command(self.display_commands, 0),
+            "powiedz": Command(self.voice_generator.play_text, 1),
+            "muzyka": Command(self.open_wmplayer, 0),
+            "zegar": Command(self.set_alarm, 0),
+            "włącz tryb cichy": Command(self.enable_silent_mode, 0),
+            "wyłącz tryb cichy": Command(self.disable_silent_mode, 0)
         }
 
     def handle_command(self, text):
@@ -37,7 +40,9 @@ class CommandHandler:
             potential_command = " ".join(words[:i])
             if potential_command in self.commands:
                 command = potential_command
-                parameters = words[i:]
+                if self.commands[command].param_count == 1:
+                    if i < len(words):
+                        parameters = [" ".join(words[i:])]
                 break
 
         return command, parameters
@@ -45,7 +50,7 @@ class CommandHandler:
     def execute_command(self, command, *parameters):
         if command in self.commands:
             try:
-                self.commands[command](*parameters)
+                self.commands[command].command(*parameters)
             except TypeError:
                 self.voice_generator.play_text("Nieprawidłowa liczba parametrów")
         else:
@@ -56,11 +61,20 @@ class CommandHandler:
         self.voice_generator.play_text("Otwieram przeglądarkę")
 
     def search(self, query):
-        webbrowser.open(f"https://www.google.com/search?q={query}")
+        parsed_query = urllib.parse.quote(query)
+        webbrowser.open(f"https://www.google.com/search?q={parsed_query}")
         self.voice_generator.play_text(f"Szukam: {query}")
 
     def search_wiki(self, query):
-        webbrowser.open(f"https://pl.wikipedia.org/wiki/{query}")
+        polish_characters_pattern = r'[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]'
+
+        if re.search(polish_characters_pattern, query):
+            parsed_query = urllib.parse.quote_plus(query)
+            webbrowser.open(f"https://www.google.com/search?q={parsed_query}%20wikipedia")
+        else:
+            parsed_query = query.replace(" ", "_")
+            webbrowser.open(f"https://pl.wikipedia.org/wiki/{parsed_query}")
+
         self.voice_generator.play_text(f"Szukam: {query} na Wikipedii")
 
     def check_weather(self, city):
