@@ -1,5 +1,5 @@
-import requests
 from VoiceGenerator import VoiceGenerator
+import requests
 
 class WeatherFetcher:
     @staticmethod
@@ -12,13 +12,13 @@ class WeatherFetcher:
                 for station in meteo_data:
                     if city.lower() in station["nazwa_stacji"].lower():
                         if station.get('temperatura_gruntu', None) is not None:
-                            return_dictionary["Temperatura"] = VoiceGenerator.number_to_text(station['temperatura_gruntu'] + " stopni Celsjusza")
+                            return_dictionary["Temperatura"] = VoiceGenerator.convert_number_to_text(station['temperatura_gruntu'] + " stopni Celsjusza")
 
                         if station.get('wiatr_srednia_predkosd', None) is not None:
-                            return_dictionary["Wiatr"] = VoiceGenerator.number_to_text(station['wiatr_srednia_predkosd'] + " metrów na sekundę")
+                            return_dictionary["Wiatr"] = VoiceGenerator.convert_number_to_text(station['wiatr_srednia_predkosd'] + " metrów na sekundę")
 
                         if station.get('opad_10min', None) is not None:
-                            return_dictionary["Opad"] = VoiceGenerator.number_to_text(station['opad_10min'] + " milimetrów")
+                            return_dictionary["Opad"] = VoiceGenerator.convert_number_to_text(station['opad_10min'] + " milimetrów")
 
                 return return_dictionary
             return None
