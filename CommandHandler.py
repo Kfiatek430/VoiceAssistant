@@ -9,10 +9,10 @@ Classes:
 
 from VoiceGenerator import VoiceGenerator
 from WeatherFetcher import WeatherFetcher
+from Command import Command
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL
 from ctypes import cast, POINTER
-from Command import Command
 import webbrowser
 import os
 import urllib.parse

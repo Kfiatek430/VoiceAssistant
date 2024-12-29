@@ -12,7 +12,7 @@ class Command:
     Represents a command with a specific function and a parameter count.
 
     Attributes:
-        command (callable): The function to be executed by the command.
+        command (callable): A callable function that can be executed when required.
         param_count (int): The number of parameters the command expects.
     """
 

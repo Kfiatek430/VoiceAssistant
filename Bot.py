@@ -60,8 +60,8 @@ class Bot:
         handles the exceptions and provides appropriate feedback.
 
         Raises:
-            sr.UnknownValueError: If the speech is unintelligible.
-            sr.RequestError: If there is an unhandled error with the speech recognition API.
+            speech_recognition.UnknownValueError: If the speech is unintelligible.
+            speech_recognition.RequestError: If there is an unhandled error with the speech recognition API.
         """
 
         with sr.Microphone() as source:
