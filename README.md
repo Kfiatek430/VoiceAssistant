@@ -59,7 +59,7 @@ Additional details are available in the [Wiki](https://github.com/Kfiatek430/Voi
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](LICENSE.md).
 
 ## Acknowledgments
 
