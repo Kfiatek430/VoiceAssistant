@@ -1,5 +1,5 @@
 """
-VoiceGenerator module.
+voice_generator module.
 
 This module provides the VoiceGenerator class for generating and playing audio from text using the edge_tts library.
 

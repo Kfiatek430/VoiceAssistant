@@ -1,11 +1,11 @@
 """
-Main module.
+main module.
 
 This module initializes and starts the voice assistant application.
 """
 
-from Bot import Bot
-from CommandHandler import CommandHandler
+from modules.bot import Bot
+from modules.command_handler import CommandHandler
 import speech_recognition as sr
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 """
-WeatherFetcher module.
+weather_fetcher module.
 
 This module provides the WeatherFetcher class for fetching weather data from the IMGW public API.
 
@@ -11,7 +11,7 @@ Usage example:
     weather_data = weather_fetcher.get_weather("Kraków")
 """
 
-from VoiceGenerator import VoiceGenerator
+from modules.voice_generator import VoiceGenerator
 import requests
 
 class WeatherFetcher:

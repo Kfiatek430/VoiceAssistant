@@ -1,5 +1,5 @@
 """
-Command module.
+command module.
 
 This module defines the Command class, which represents a command with a specific function and a parameter count.
 

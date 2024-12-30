@@ -1,5 +1,5 @@
 """
-CommandHandler module.
+command_handler module.
 
 This module provides the CommandHandler class for handling commands and executing corresponding actions.
 
@@ -7,9 +7,9 @@ Classes:
     CommandHandler: A class to handle and execute commands.
 """
 
-from VoiceGenerator import VoiceGenerator
-from WeatherFetcher import WeatherFetcher
-from Command import Command
+from modules.voice_generator import VoiceGenerator
+from modules.weather_fetcher import WeatherFetcher
+from modules.command import Command
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 from comtypes import CLSCTX_ALL
 from ctypes import cast, POINTER

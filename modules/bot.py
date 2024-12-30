@@ -1,5 +1,5 @@
 """
-Bot Module.
+bot module.
 
 This module contains the `Bot` class, which represents a voice-controlled bot. The bot listens for voice commands,
 interprets them, and executes the corresponding actions using a command handler and a voice recognizer.
@@ -8,7 +8,7 @@ Classes:
     Bot: A class to represent a voice-controlled bot.
 
 Usage Example:
-    from CommandHandler import CommandHandler
+    from command_handler import CommandHandler
     import speech_recognition as sr
 
     if __name__ == "__main__":
