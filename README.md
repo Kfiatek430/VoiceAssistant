@@ -63,5 +63,6 @@ This project is licensed under the [MIT License](LICENSE.md).
 
 ## Acknowledgments
 
+- Speech recognition functionality provided by the [speech_recognition](https://github.com/Uberi/speech_recognition) library.
 - Powered by the [edge_tts](https://github.com/rany2/edge-tts) library for text-to-speech conversion.
 - Weather data provided by the IMGW public API.
