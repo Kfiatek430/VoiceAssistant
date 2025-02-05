@@ -7,12 +7,11 @@ Classes:
     CommandHandler: A class to handle and execute commands.
 """
 
+import platform
+import pyautogui
 from modules.voice_generator import VoiceGenerator
 from modules.weather_fetcher import WeatherFetcher
 from modules.command import Command
-from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
-from comtypes import CLSCTX_ALL
-from ctypes import cast, POINTER
 import webbrowser
 import os
 import urllib.parse
@@ -229,7 +228,6 @@ class CommandHandler:
         text_to_speak = "Dostępne komendy to: "
         for command in self.commands.keys():
             text_to_speak += command + ", "
-
         VoiceGenerator.speak_text(text_to_speak)
 
     @staticmethod
@@ -285,7 +283,6 @@ class CommandHandler:
         Sets the silent mode state.
 
         This method mutes or unmutes the system volume based on the provided state.
-        It uses the pycaw library to control the system audio endpoint volume.
 
         Args:
             state (int): The state to set the silent mode to.
@@ -295,18 +292,39 @@ class CommandHandler:
             Exception: If there is an error accessing the audio endpoint volume.
         """
 
-        devices = AudioUtilities.GetSpeakers()
-        interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-        volume_controller = cast(interface, POINTER(IAudioEndpointVolume))
+        current_os = platform.system()
 
-        if state == 1:
-            volume_controller.SetMute(1, None)
-            self.isSilentMode = True
-            VoiceGenerator.speak_text("Włączam tryb cichy")
+        if current_os == "Windows":
+            if state == 1 and not self.isSilentMode:
+                pyautogui.press("volumemute")
+                self.isSilentMode = True
+                VoiceGenerator.speak_text("Włączam tryb cichy")
+            elif state == 0 and self.isSilentMode:
+                pyautogui.press("volumemute")
+                self.isSilentMode = False
+                VoiceGenerator.speak_text("Wyłączam tryb cichy")
+            else:
+                VoiceGenerator.speak_text("Tryb cichy już jest ustawiony")
+        elif current_os == "Linux":
+            if state == 1:
+                os.system("amixer set Master mute")
+                self.isSilentMode = True
+                VoiceGenerator.speak_text("Włączam tryb cichy")
+            else:
+                os.system("amixer set Master unmute")
+                self.isSilentMode = False
+                VoiceGenerator.speak_text("Wyłączam tryb cichy")
+        elif current_os == "Darwin":  # macOS
+            if state == 1:
+                os.system("osascript -e 'set volume with output muted'")
+                self.isSilentMode = True
+                VoiceGenerator.speak_text("Włączam tryb cichy")
+            else:
+                os.system("osascript -e 'set volume without output muted'")
+                self.isSilentMode = False
+                VoiceGenerator.speak_text("Wyłączam tryb cichy")
         else:
-            volume_controller.SetMute(0, None)
-            self.isSilentMode = False
-            VoiceGenerator.speak_text("Wyłączam tryb cichy")
+            VoiceGenerator.speak_text("System operacyjny nie jest obsługiwany przez funkcję zmiany głośności.")
 
     @staticmethod
     def exit_program():
