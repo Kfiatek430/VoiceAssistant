@@ -46,6 +46,8 @@ The following table lists all available commands in the application along with t
 | `powiedz`                    | `<text>`       | Converts the given text to speech and plays it.                      |
 | `muzyka`                     | None           | Opens Windows Media Player.                                          |
 | `zegar`                      | None           | Opens the system clock application.                                  |
+| `włącz tryb cichy`           | None           | Mutes the system volume.                                             |
+| `wyłącz tryb cichy`          | None           | Unmutes the system volume.                                           |
 
 ### Notes:
 - Commands with `<parameters>` require user input for additional information (e.g., search query or city name).
