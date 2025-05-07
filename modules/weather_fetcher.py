@@ -1,46 +1,9 @@
-"""
-weather_fetcher module.
-
-This module provides the WeatherFetcher class for fetching weather data from the IMGW public API.
-
-Classes:
-    WeatherFetcher: A class to fetch weather data for a given city.
-
-Usage example:
-    weather_fetcher = WeatherFetcher()
-    weather_data = weather_fetcher.get_weather("Kraków")
-"""
-
 from modules.voice_generator import VoiceGenerator
 import requests
 
 class WeatherFetcher:
-    """
-    A class to fetch weather data from the IMGW public API.
-
-    Methods:
-        get_weather(city): Fetches the weather data for a given city.
-    """
-
     @staticmethod
     def get_weather(city):
-        """
-        Fetches the weather data for a given city.
-
-        This method retrieves weather data from the IMGW public API and returns
-        a dictionary with weather information for the specified city.
-
-        Args:
-            city (str): The name of the city to fetch the weather for.
-
-        Raises:
-            requests.RequestException: If an error occurs while fetching the data.
-
-        Returns:
-            dict: A dictionary containing weather information such as temperature, wind speed, and precipitation if data is found.
-            None: If no data is found or an error occurs.
-        """
-
         try:
             response = requests.get('https://danepubliczne.imgw.pl/api/data/meteo/')
             if response.status_code == 200:
